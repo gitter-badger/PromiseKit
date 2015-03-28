@@ -12,6 +12,10 @@ Use PromiseKit with your favorite third party libraries:
 * [AFNetworking](https://github.com/csotiriou/AFNetworking-PromiseKit) (alternatives:  [1](https://github.com/skeeet/AFNetworking-PromiseKit))
 * [Facebook SDK](https://github.com/FastrBooks/Facebook-PromiseKit)
 
+# Pods Built on PromiseKit
+
+* [MBTNetworking](https://github.com/madbat/MBTNetworking) (pretty interesting networking library built on AFNetworking, Mantle and PromiseKit)
+
 # How To Add Promises to Third Party Libraries
 
 It would be great if every library with asynchronous functionality would offer opt-in `PMKPromise *` variants for the asynchronous mechanisms.
