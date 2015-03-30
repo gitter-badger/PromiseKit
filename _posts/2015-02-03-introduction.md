@@ -11,6 +11,17 @@ A [promise](http://wikipedia.org/wiki/Promise_%28programming%29) represents the 
 
 A promise is an object that wraps an asynchronous task. Pass that object around, and write clean, ordered code; a logical, simple, modular stream of progression from one asynchronous task to another.
 
+{% highlight objective-c %}
+[self login].then(^{
+    return [API fetchKittens];
+}).then(^(id fetchedKittens){
+    self.kittens = fetchedKittens;
+    [self.tableView reloadData];
+}).catch(^(NSError *error){
+    [[[UIAlertView alloc] init…] show];
+});
+{% endhighlight %}
+
 # Oh. Cool…?
 
 Promises are neat because:
