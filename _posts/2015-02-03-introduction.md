@@ -14,16 +14,19 @@ A promise is an object that wraps an asynchronous task. Pass that object around,
 {% highlight objective-c %}
 [self login].then(^{
 
-    // login wrapped an async task in a promise
+    // our login method wrapped an async task in a promise
     return [API fetchKittens];
 
 }).then(^(NSArray *fetchedKittens){
 
+    // our API class wraps our API and returns promises
+    // fetchKittens returned a promise that resolves with an array of kittens
     self.kittens = fetchedKittens;
     [self.tableView reloadData];
 
 }).catch(^(NSError *error){
 
+    // any errors in any of the above promises land here
     [[[UIAlertView alloc] init…] show];
 
 });
