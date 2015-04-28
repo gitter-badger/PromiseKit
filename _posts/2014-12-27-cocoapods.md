@@ -12,6 +12,10 @@ Use PromiseKit with your favorite third party libraries:
 * [AFNetworking](https://github.com/csotiriou/AFNetworking-PromiseKit) (alternatives:  [1](https://github.com/skeeet/AFNetworking-PromiseKit))
 * [Facebook SDK](https://github.com/FastrBooks/Facebook-PromiseKit)
 
+Or see if there’s anything that uses PromiseKit on CocoaPods that you could use:
+
+* [uses:PromiseKit](https://cocoapods.org/?q=uses%3Apromisekit*)
+
 # Pods Built on PromiseKit
 
 * [MBTNetworking](https://github.com/madbat/MBTNetworking) (pretty interesting networking library built on AFNetworking, Mantle and PromiseKit)
