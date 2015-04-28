@@ -85,7 +85,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'PromiseKit' do |ss|
-    ss.dependency 'PromiseKit/base', 'ABCKitten/base'
+    ss.dependency 'PromiseKit/Promise', '~> 1.5'
+    ss.dependency 'ABCKitten/base'
     ss.source_files = 'ABCKitten+PromiseKit.{m,h}'
   end
 end
