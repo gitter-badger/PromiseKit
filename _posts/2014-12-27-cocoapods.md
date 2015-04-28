@@ -3,6 +3,8 @@ category: pods
 layout: default
 ---
 
+For instructions on how to install PromiseKit with CocoaPods [see the Getting Started guide](/getting-started).
+
 # Pods That Add Promises To Third Party Libraries
 
 Use PromiseKit with your favorite third party libraries:
