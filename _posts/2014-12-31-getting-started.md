@@ -124,4 +124,8 @@ Note that *currently* only the Swift version will be built with Carthage.
 If you don’t want to use CocoaPods you can use [CocoaPods Packager](https://github.com/CocoaPods/cocoapods-packager) to generate a static version of PromiseKit and just embed that.
 
 
+# Requirements & Dependencies
+
+PromiseKit will work back to iOS 6, but not with Carthage as Carthage builds frameworks and frameworks only work on iOS 8 and above. The Swift version *will* work on iOS 7, but you cannot use CocoaPods to install it, you will need to copy the source files into your project and have them compile by hand. This *does* work! But you will need to make sure you copy only what you need (only copy `.swift` files), and if you need the `NSURLConnection` categories, you will still need `OMGHTTPURLRQ`, which you can simply install with CocoaPods, or just copy all the sources in (OMGHTTPURLRQ is much simpler so it’s just 3 `.m` files and 3 `.h` files).
+
 <div><a class="pagination" href="/swift">Next: Specifics Regarding Swift PromiseKit</a></div>
