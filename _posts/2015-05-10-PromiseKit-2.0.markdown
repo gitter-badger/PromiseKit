@@ -294,8 +294,8 @@ you must import with the old syntax:
 
 ## Swift Compiler Issues
 
-The Swift compiler will often complain about a `then`. First thing is to specify
-the closure return types:
+The Swift compiler will often error with `then`. To figure out the issue first
+try specifying the full signature for your closures:
 
 {% highlight swift %}
 foo.then {
@@ -310,11 +310,12 @@ foo.then { obj -> Promise<Type> in
     return bar()
 }
 
-// because the Swift compiler cannot infer closure types very well yet
-// alternatively one line closures almost always compile without explicitness.
-// we hate this as it makes using promises in Swift ugly, but I sincerely hope
-// that Apple intend to improve the detection of closure types to make using
-// Promises in Swift as delightful as in objc.
+// because the Swift compiler cannot infer closure types very
+// well yet alternatively one line closures almost always
+// compile without explicitness. We hate this as it makes
+// using promises in Swift ugly, but I sincerely hope that
+// Apple intend to improve the detection of closure types to
+// make using Promises in Swift as delightful as in objc.
 
 foo.then {
     return bar()
