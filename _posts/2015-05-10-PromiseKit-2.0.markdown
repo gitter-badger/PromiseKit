@@ -5,7 +5,7 @@ layout: default
 
 # PromiseKit 2.0
 
-Swift was a surprise to us all, no more than to the barely-released PromiseKit. I quickly wrote an implementation of Promises in Swift to see how it would feel.
+Swift was a surprise to all of us, and no more than to the barely-released PromiseKit. I quickly wrote an implementation of Promises in Swift to see how it would feel.
 Type-safe promises had their charm, though the compiler was quite difficult to
 appease in those pre Swift 1.2 days. However we had two different promise
 implementations and they could not bridge.
@@ -324,7 +324,7 @@ foo.then {
 
 If that doesn’t work then it is probably in fact unhappy about the syntax inside
 the closure, but has become confused and is blaming the syntax of your `then`. Move the code out of the closure and try to compile it at the level of a plain
-function.
+function, when it is fixed, move it back.
 
 If you have further issues, feel free to open a ticket **with a screenshot** of
 the error and I can assist. Hopefully Swift 1.3 will be better with our kind of
@@ -342,7 +342,7 @@ Because `AnyPromise` is for Objective-C it can only hold objects that Objective-
 Be aware of:
 
 * Cancellation
-* `AnyPromise` no longer catches most exceptions. You can still `@throw` strings and `NSError` objects. We decided in the end that exceptions in Objective-C mostly represent serious programmer errors and should be allowed to crash the program. Here is the discussion: https://github.com/mxcl/PromiseKit/issues/13
+* `AnyPromise` no longer catches most exceptions. You can still `@throw` strings and `NSError` objects. We decided in the end that exceptions in Objective-C mostly represent serious programmer errors and should be allowed to crash the program. [Discussion here](https://github.com/mxcl/PromiseKit/issues/13)
 * `PMKPromise` will continue to work as a namespace, but is considered deprecated
 * Features like `when` have been moved to top-level functions, eg. `[PMKPromise when:]` is now `PMKWhen`. For swift they are the same (`when`, `join`, etc.)
 * `PMKJoin` has a different parameter order, see the documentation
