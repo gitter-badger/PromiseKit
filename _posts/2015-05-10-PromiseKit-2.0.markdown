@@ -217,6 +217,8 @@ promise.then(^{
 })
 {% endhighlight %}
 
+Note that `recover` always receives cancellations.
+
 
 ## `zalgo` and `waldo`
 
