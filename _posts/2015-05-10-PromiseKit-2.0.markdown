@@ -169,10 +169,23 @@ NSURLConnection.GET(url).then {
 
 The PromiseKit categories have all been amended to handle cancellation for types that support it.
 
+As a bonus, you can quickly cancel any chain now:
+
+{% highlight objective-c %}
+[NSURLConnection GET:url].then(^{
+    //…
+}).then(^{
+    @throw [NSError cancelledError];
+}).then(^{
+    //…
+});
+{% endhighlight %}
+
+This can conveniently and elegantly replace rightward drift inside your chain, or throwing some magic value that you then need to remmeber to ignore in your `catch` handlers.
 
 ## `recover`
 
-To work around ambiguity in `catch` we provide the alternatively named `recover` for `Promise<T>`:
+To work around [ambiguity](https://github.com/mxcl/PromiseKit/issues/56) in `catch` we provide the alternatively named `recover` for `Promise<T>`:
     
 {% highlight swift %}
 promise.then {
@@ -188,8 +201,8 @@ promise.then {
 }
 {% endhighlight %}
 
-With `AnyPromise` `catch` itself can be used in this manner:
-    
+With `AnyPromise` `catch` itself (as before) can be used in this manner:
+
 {% highlight objective-c %}
 promise.then(^{
     return [CLLocationManager promise];
@@ -337,20 +350,20 @@ we are hopeful that this is just temporary.
 
 Because `AnyPromise` is for Objective-C it can only hold objects that Objective-C can understand. Thus if it cannot be `id` it cannot resolve an `AnyPromise`.
 
-# Porting From PromiseKit 1.x
+# Porting Considerations
 
-Be aware of:
+When porting from PromiseKit 1.x to 2.x, your code will probably compile as before. However, you should be aware of:
 
 * Cancellation
 * `AnyPromise` no longer catches most exceptions. You can still `@throw` strings and `NSError` objects. We decided in the end that exceptions in Objective-C mostly represent serious programmer errors and should be allowed to crash the program. [Discussion here](https://github.com/mxcl/PromiseKit/issues/13)
 * `PMKPromise` will continue to work as a namespace, but is considered deprecated
 * Features like `when` have been moved to top-level functions, eg. `[PMKPromise when:]` is now `PMKWhen`. For swift they are the same (`when`, `join`, etc.)
 * `PMKJoin` has a different parameter order, see the documentation
-* PromiseKit 2.0 has an iOS 7 minimum deployment target. Though users who want convenience it is in fact 8.0. This is because CocoaPods and Carthage will only build Swift projects for iOS 8. We intend to explore building a static library that will work on iOS 7, so stay tuned if you must use PromiseKit 2 on iOS 7 and don’t want to manually compile the framework. The other option is PromiseKit 1.x which provided you don’t use the Swift version supports back to iOS 6.
+* PromiseKit 2.0 has an iOS 7 minimum deployment target. Though users who want convenience it is in fact 8.0. This is because CocoaPods and Carthage will only build Swift projects for iOS 8. We intend to explore building a static library that will work on iOS 7, so stay tuned if you must use PromiseKit 2 on iOS 7 and don’t want to manually compile the framework. The other option is PromiseKit 1.x which (provided you don’t use the Swift version) supports back to iOS 6.
 * Few exceptions are caught by `AnyPromise`. Because we explicitly encouraged it in the PromiseKit 1.x documentation, we still catch thrown `NSString` objects and thrown `NSError` objects. As before, `Promise<T>` will not catch anything since you can’t throw nor can you catch anything in Swift.
 * PromiseKit 2 is mostly written in Swift, this means you will have to check the relevant project settings to embed a swift framework.
 
-In a few months we will delete the Swift portion of PromiseKit 1.x. It was never officially endorsed and 2.x is better in every way.
+In a few months we will delete the Swift portion of PromiseKit 1.x (CocoaPods will still find it if you depend on PromiseKit 1.x). It was never officially endorsed and 2.x is better in every way.
 
 
 # The Future
