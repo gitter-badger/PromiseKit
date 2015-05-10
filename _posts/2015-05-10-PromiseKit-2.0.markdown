@@ -5,15 +5,12 @@ layout: default
 
 # PromiseKit 2.0
 
-Swift was a surprise to us all, no more than to barely-released PromiseKit. I
-quickly wrote an implementation of Promises in Swift to see how it would feel.
+Swift was a surprise to us all, no more than to the barely-released PromiseKit. I quickly wrote an implementation of Promises in Swift to see how it would feel.
 Type-safe promises had their charm, though the compiler was quite difficult to
 appease in those pre Swift 1.2 days. However we had two different promise
 implementations and they could not bridge.
 
-It was not immediately obvious how this should be solved. Objective-C will never
-be able to use Swift promises because they are Generic. But Swift could not use
-our Objective-C promises because they have this syntax:
+It was not immediately obvious how this should be solved. Objective-C will never be able to use Swift promises because they are Generic. But Swift could not (trivially) use our Objective-C promises because they have this syntax:
 
 {% highlight objective-c %}
 - (PMKPromise *(^)(id))then;
@@ -38,16 +35,14 @@ But Swift was not designed for our edge cases.
 
 ## Our Solution
 
-We have two promises in PromiseKit 2.0:
+PromiseKit 2.0 has two promise types:
 
  * `Promise<T>` (Swift)
  * `AnyPromise` (Objective-C)
  
-Each is designed to be an approproate promise implementation for the strong
-points of its language.
+Each is designed to be an approproate promise implementation for the strong points of its language.
 
-Promise<T> is strict, defined and precise. AnyPromise is loose, flexible and
-dynamic.
+`Promise<T>` is strict, defined and precise. `AnyPromise` is loose, flexible and dynamic.
 
 In use `AnyPromise` behaves like `PMKPromise` did:
 
@@ -72,11 +67,11 @@ In use `AnyPromise` behaves like `PMKPromise` did:
 });
 {% endhighlight %}
 
-`Promise<T>` however is strict, specify the data type you expect by specializing
+`Promise<T>` however is strict. Specify the data type you expect by specializing
 your `then`:
 
 {% highlight swift %}
-NSURLConnection.GET("http://placekitten.org/\(width)/\(height)").then { (image: UIImage) in
+NSURLConnection.GET("http://placekitten.com/\(width)/\(height)").then { (image: UIImage) in
     self.imageView.image = image
 }.catch { error in 
     // If PromiseKit could not decode an image (because you made a mistake and
@@ -87,13 +82,13 @@ NSURLConnection.GET("http://placekitten.org/\(width)/\(height)").then { (image: 
 
 // but if you want just data, ask for just data:
 
-NSURLConnection.GET("http://placekitten.org/\(width)/\(height)").then { (data: NSData) in
+NSURLConnection.GET("http://placekitten.com/\(width)/\(height)").then { (data: NSData) in
     self.imageView.image = UIImage(data: image)
 }
 {% endhighlight %}
 
 
-# New Features For 2.0
+# 2.0 Features
 
 ## Bridging Promises
 
@@ -109,9 +104,8 @@ NSURLConnection.POST(url, multipartFormData: formData).then {
 }
 {% endhighlight %}
 
-If you need to get a `Promise<T>` to Objective-C land, you have to write some 
-Swift (it is simply impossible for objc to **see** instances
-of Generic classes so our only option is to bridge via Swift):
+If you need to bridge a `Promise<T>` to Objective-C land, you have to write some  Swift (it is simply impossible for objc to **see** instances
+of generic classes so our only option is to bridge via Swift):
 
 {% highlight swift %}
 class MyObject {
@@ -131,17 +125,14 @@ class MyObject {
 
 PromiseKit now supports the idea of cancellation (spelled like Apple spell it!).
 
-If the underlying asynchronous task that the promise represents can be cancelled
-then the author of that promise can register a specific error domain/code pair
-with PromiseKit and that error will not trigger a catch handler (by default).
-For example using an alert view:
+If the underlying asynchronous task that the promise represents can be cancelled then the author of that promise can register a specific error domain/code pair with PromiseKit and that error will not trigger a catch handler. For example using an alert view:
 
 {% highlight swift %}
 let alert = UIAlertView(…)
 alert.promise().then {
     // continue
 }.catch {
-    // won’t catch if the user presses cancel
+    // this handler won’t execute if the user pressed cancel
 }
 {% endhighlight %}
 
@@ -173,10 +164,12 @@ NSURLConnection.GET(url).then {
 }
 {% endhighlight %}
 
+The PromiseKit categories have all been amended to handle cancellation for types that support it.
+
 
 ## `recover`
 
-To work around ambiguity in `catch` we provide the alternatively named `recover` for Promise<T>:
+To work around ambiguity in `catch` we provide the alternatively named `recover` for `Promise<T>`:
     
 {% highlight swift %}
 promise.then {
@@ -211,9 +204,9 @@ promise.then(^{
 
 ## `zalgo` and `waldo`
 
-Promises always execute `then` handlers via GCD. In high performance situations it would be nice for `then` handlers to execute as soon as possible.
+Promises always execute `then` handlers via <abbr title='Grand Central Dispatch'>GCD</abbr> (by default on the main queue). We provide `zalgo` and `waldo` for high performance situations where this slight delay must be avoided.
 
-<center class="big">
+<center class="big" style="font-size: 1.1rem">
 Please note, there are <a href="http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony">excellent reasons</a> why you should never use <code>zalgo</code>. We provide it (mostly) for library authors that use promises. In such situations you should write tests to verify that you have not created possible race conditions.
 </center>
 
@@ -235,9 +228,7 @@ NSURLConnection.GET(url).then(on: zalgo) {
 }
 {% endhighlight %}
 
-Because the queue we execute on is undefined we provide `waldo`, which will
-execute on the queue the previous promise was resolved *unless* it is the main
-queue. In that case we dispatch to the default background queue.
+Because the queue we execute on is undefined we provide `waldo`, which will unleash Zalgo unless the queue is the main queue. In that case we dispatch to the default background queue.
 
 Again, **please** don’t use these in a misguided attempt to improve performance: the performance gain is neglible. We provide them for situations when it is imperative that there is minimal delay and for libraries that should be as performant as possible.
 
@@ -246,7 +237,7 @@ Again, **please** don’t use these in a misguided attempt to improve performanc
 
 ## `firstly`
 
-With a chain our code can be more readable if all promises are returned at the same level of indentation; we provide `firstly`:
+Readability can be improved for simple chains if all promises are at the same level of indentation; we provide `firstly`:
 
 {% highlight swift %}
 firstly {
@@ -333,17 +324,17 @@ usage.
 It is notable that a lot of our above examples won’t compile right now, and that
 we are hopeful that this is just temporary.
 
-## `AnyPromise` wraps `AnyObject?`
+## AnyPromise Resolves With `AnyObject?`
 
-Because `AnyPromise` is for Objective-C it can only hold objects that Objective-C can understand. Thus if it cannot be `id` it cannot be inside an AnyPromise.
+Because `AnyPromise` is for Objective-C it can only hold objects that Objective-C can understand. Thus if it cannot be `id` it cannot resolve an `AnyPromise`.
 
 # Porting From PromiseKit 1.x
 
 Be aware of:
 
 * Cancellation
-* AnyPromise no longer catches most exceptions. You can still `@throw` strings and `NSError` objects. We decided in the end that exceptions in Objective-C mostly represent serious programmer errors and should be allowed to crash the program. Here is the discussion: https://github.com/mxcl/PromiseKit/issues/13
-* PMKPromise will continue to work as a namespace, but is considered deprecated
+* `AnyPromise` no longer catches most exceptions. You can still `@throw` strings and `NSError` objects. We decided in the end that exceptions in Objective-C mostly represent serious programmer errors and should be allowed to crash the program. Here is the discussion: https://github.com/mxcl/PromiseKit/issues/13
+* `PMKPromise` will continue to work as a namespace, but is considered deprecated
 * Features like `when` have been moved to top-level functions, eg. `[PMKPromise when:]` is now `PMKWhen`. For swift they are the same (`when`, `join`, etc.)
 * `PMKJoin` has a different parameter order, see the documentation
 * PromiseKit 2.0 has an iOS 7 minimum deployment target. Though users who want convenience it is in fact 8.0. This is because CocoaPods and Carthage will only build Swift projects for iOS 8. We intend to explore building a static library that will work on iOS 7, so stay tuned if you must use PromiseKit 2 on iOS 7 and don’t want to manually compile the framework. The other option is PromiseKit 1.x which provided you don’t use the Swift version supports back to iOS 6.
@@ -351,5 +342,10 @@ Be aware of:
 * PromiseKit 2 is mostly written in Swift, this means you will have to check the relevant project settings to embed a swift framework.
 
 In a few months we will delete the Swift portion of PromiseKit 1.x. It was never officially endorsed and 2.x is better in every way.
+
+
+# The Future
+
+PromiseKit is under active development and is used in hundreds of apps on the store. We will continue to improve and maintain it, provided you use it!
 
 [PromiseKit on Github](https://github.com/mxcl/PromiseKit)
