@@ -48,20 +48,21 @@ In use `AnyPromise` behaves like `PMKPromise` did:
 
 {% highlight objective-c %}
 [NSURLConnection GET:@"http://placekitten.org/%@/%@", width, height].then(^(UIImage *image){
-    
-    // PromiseKit determined the returned data was an image by inspecting the
-    // HTTP response headers.
-    
+
+    // PromiseKit determined the returned data was an image by
+    // inspecting the HTTP response headers.
+
     self.imageView.image = image;
 });
 
 // or add optional parameters:
 
 [NSURLConnection GET:…].then(^(UIImage *image, NSHTTPURLResponse* rsp, NSData *data){
-    
-    // With AnyPromise adding parameters to your then handler is always safe
-    // for our NSURLConnection categories, we will detect this and include
-    // the NSHTTPURLResponse and the raw NSData response if you do so.
+
+    // With AnyPromise adding parameters to your then handler is
+    // always safe for our NSURLConnection categories, we will
+    // detect this and include the NSHTTPURLResponse and the raw
+    // NSData response if you do so.
     
     self.imageView.image = image;
 });
@@ -73,11 +74,13 @@ your `then`:
 {% highlight swift %}
 NSURLConnection.GET("http://placekitten.com/\(width)/\(height)").then { (image: UIImage) in
     self.imageView.image = image
-}.catch { error in 
-    // If PromiseKit could not decode an image (because you made a mistake and
-    // actually the endpoint provides JSON let’s say). Then you get an error.
-    // With AnyPromise you’d get a JSON dictionary and then you would crash when
-    // trying to set that to the imageView.image. This is typical to Objective-C.
+}.catch { error in
+    // If PromiseKit could not decode an image (because you made
+    // a mistake and actually the endpoint provides JSON let’s
+    // say). Then you get an error. With AnyPromise you’d get a
+    // JSON dictionary and then you would crash when trying to
+    // set that to the imageView.image. This is typical to
+    // Objective-C.
 }
 
 // but if you want just data, ask for just data:
@@ -224,8 +227,8 @@ Thus to zalgo we:
 
 {% highlight swift %}
 NSURLConnection.GET(url).then(on: zalgo) {
-    // we will execute on the queue that the previous promise resolved
-    // thus consider the queue completely *undefined*
+    // we will execute on the queue that the previous promise
+    // resolved thus consider the queue completely *undefined*
 }
 {% endhighlight %}
 
@@ -279,10 +282,14 @@ you must import with the old syntax:
 {% highlight objective-c %}
 #import <PromiseKit/PromiseKit.h>
 
-// using @import will not break anything, but it will not import everything
-// either:
+// using @import will not break anything, but it will not
+// import everything either:
 
 @import PromiseKit;
+
+// so if you must use it, use both:
+@import PromiseKit;
+#import <PromiseKit/PromiseKit.h>
 {% endhighlight %}
 
 ## Swift Compiler Issues
