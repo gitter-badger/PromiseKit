@@ -10,7 +10,7 @@ Type-safe promises had their charm, though the compiler was quite difficult to
 appease in those pre Swift 1.2 days. However we had two different promise
 implementations and they could not bridge.
 
-It was not immediately obvious how this should be solved. Objective-C will never be able to use Swift promises because they are Generic. But Swift could not (trivially) use our Objective-C promises because they have this syntax:
+It was not immediately obvious how this should be solved. Objective-C will never be able to use Swift promises because they are *generic*. But Swift could not (trivially) use our Objective-C promises because they have this syntax:
 
 {% highlight objective-c %}
 - (PMKPromise *(^)(id))then;
@@ -29,7 +29,7 @@ PromiseKit to be delightful in use:
 
 Chaining with dot notation is more readable. Taking `id` instead of a specific
 block format allows you to pass any block format, and allows us to do cool
-tricks like having up to three optional parameters on any then.
+tricks like having up to three optional parameters on any `then`.
 
 But Swift was not designed for our edge cases.
 
@@ -137,7 +137,7 @@ alert.promise().then {
 {% endhighlight %}
 
 This is typically what you want. If an alert is part of a chain then provided
-the user pushes something other than cancel, you want to continue, but if the
+the user taps a button other than cancel, you want to continue; yet if the
 user cancels, then you want to abort the chain, but since the user explicitly
 cancelled the operation, you don't want to run a catch handler that shows an
 error message.
@@ -210,10 +210,11 @@ Promises always execute `then` handlers via <abbr title='Grand Central Dispatch'
 Please note, there are <a href="http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony">excellent reasons</a> why you should never use <code>zalgo</code>. We provide it (mostly) for library authors that use promises. In such situations you should write tests to verify that you have not created possible race conditions.
 </center>
 
-Normally a then can be dispatched to the queue of your choice like so:
+Normally a `then` can be dispatched to the queue of your choice:
 
 {% highlight swift %}
 let bgq = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+
 NSURLConnection.GET(url).then(on: bgq) {
     // we’re on the queue we asked for
 }
@@ -233,7 +234,7 @@ Because the queue we execute on is undefined we provide `waldo`, which will unle
 Again, **please** don’t use these in a misguided attempt to improve performance: the performance gain is neglible. We provide them for situations when it is imperative that there is minimal delay and for libraries that should be as performant as possible.
 
 
-# Other Nicities
+# Other Niceties
 
 ## `firstly`
 
