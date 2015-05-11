@@ -285,6 +285,8 @@ We worked hard to make a single framework that has a different public interface 
 #import <PromiseKit/PromiseKit.h>
 {% endhighlight %}
 
+With Swift, simply `import PromiseKit` as you would expect.
+
 ## Swift Compiler Issues
 
 The Swift compiler will often error with `then`. To figure out the issue, first
