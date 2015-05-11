@@ -19,7 +19,7 @@ An unusual method signature that gives us special powers:
 [self wait].then(^{
     return [self fetch];
 }).then(^(NSArray *results){
-    NSLog(@"%@", results);
+    return [NSURLConnection GET:@"%"]
 });
 {% endhighlight %}
 
@@ -109,7 +109,7 @@ class MyObject {
         }
     }
     
-    @objc func promise() -> AnyPromise {
+    @objc public func promise() -> AnyPromise {
         return AnyPromise(bound: promise())
     }
 }
