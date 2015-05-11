@@ -1,6 +1,6 @@
 ---
 category: news
-layout: opener
+layout: news
 ---
 
 # PromiseKit 2.0
