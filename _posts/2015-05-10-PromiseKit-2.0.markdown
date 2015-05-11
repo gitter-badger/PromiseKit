@@ -261,8 +261,7 @@ PromiseKit 1.x was well tested, and includes a port of the entire Promises/A+ te
 
 ## Carthage Support
 
-PromiseKit 1.x supports Carthage, but you end up having all the categories
-compiled in and thus your application links against almost all system frameworks (which is rarely desired). PromiseKit 2’s xcodeproj only builds `CorePromise`. If you choose to use Carthage you will have to copy any categories into your sources in order to use them. Carthage will check out the category sources into `/Carthage/Checkouts/PromiseKit/Categories` for you.
+PromiseKit 1.x supports Carthage (though only for Swift), but you end up having all the categories compiled in and thus your application links against almost all system frameworks (which is rarely desired). PromiseKit 2’s xcodeproj only builds `CorePromise`. If you choose to use Carthage you will have to copy any categories into your sources in order to use them. Carthage will check out the category sources into `/Carthage/Checkouts/PromiseKit/Categories` for you.
 
 CocoaPods, as ever, will compile categories into the framework itself, and since they are all subspecs, you can pick and choose which ones you get. By default, CocoaPods will only bundle the `Foundation` and `UIKit` categories.
 
