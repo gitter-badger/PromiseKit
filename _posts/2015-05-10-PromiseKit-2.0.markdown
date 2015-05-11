@@ -5,31 +5,27 @@ layout: news
 
 # PromiseKit 2.0
 
-Apple's Swift announcement was a jaw-dropper and meant big changes for PromiseKit, which, at that time, was still in its infancy. I wrote an implementation of promises in Swift to see how it would feel (in those days, the compiler was difficult to appease).
-Type-safe promises had their charm; however, there were now two promise implementations which couldn't be bridged.
+Apple's Swift announcement was a jaw-dropper and meant big changes for PromiseKit, which, at that time, was still in its infancy. Shortly after the announcement I jumped into Xcode and rocked out an implementation of promises in Swift to see how it would feel. After fighting the compiler for a while, I had an implementation of type-safe promises and it was clear that they had their charm; however, we now had separate Swift and Objective-C promise implementations and they couldn't be bridged.
 
-The solution wasn't immediately obvious. Objective-C would never be able to use Swift promises because they are *generic*, and Swift could not (trivially) use Objective-C promises because they have this syntax:
+A solution to this situation wasn't immediately obvious. Objective-C would never be able to use Swift promises because they were *generic*, and Swift could not (trivially) use our Objective-C promises because of their unusual method signature:
 
 {% highlight objective-c %}
 - (PMKPromise *(^)(id))then;
 {% endhighlight %}
 
-This method returns a block that takes `id`. This syntax allows
-PromiseKit to be delightful in use. Observe!
+An unusual method signature that gives us special powers:
 
 {% highlight objective-c %}
 [self wait].then(^{
     return [self fetch];
 }).then(^(NSArray *results){
     NSLog(@"%@", results);
-})
+});
 {% endhighlight %}
 
-Chaining with dot notation is more readable. Taking `id` instead of a specific
-block format allows you to pass any block format and allows us to do cool
-tricks like adding up to three parameters on any `then`.
+A dot-notated, chainable syntax that accepts variadic blocks! Super powerful and flexible, but Swift was not designed to cater to our edge case.
 
-But Swift was not designed for our edge cases.
+An ideal solution would allow promises to bridge from Swift to Objective-C and back, but not lose the compelling features of each.
 
 ## Our Solution
 
@@ -42,7 +38,7 @@ Each is designed to be an approproate promise implementation for the strong poin
 
 `Promise<T>` is strict, defined and precise. `AnyPromise` is loose, flexible and dynamic.
 
-`AnyPromise` behaves like `PMKPromise` once did:
+`AnyPromise` behaves like `PMKPromise`:
 
 {% highlight objective-c %}
 [NSURLConnection GET:@"http://placekitten.org/%@/%@", width, height].then(^(UIImage *image){
