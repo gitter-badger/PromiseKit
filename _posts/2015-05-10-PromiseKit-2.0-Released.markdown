@@ -3,7 +3,7 @@ category: news
 layout: news
 ---
 
-<center><img src="/img/PMKBanner2.png"></center>
+<center><img src="/public/img/PMKBanner2.png"></center>
 
 # PromiseKit 2.0
 
