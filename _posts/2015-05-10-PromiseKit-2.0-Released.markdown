@@ -38,7 +38,7 @@ Each is designed to be an approproate promise implementation for the strong poin
 
 `Promise<T>` is strict, defined and precise. `AnyPromise` is loose, flexible and dynamic.
 
-`AnyPromise` behaves like `PMKPromise`:
+`AnyPromise` behaves like PromiseKit 1’s Objective-C promise implementation (`PMKPromise`):
 
 {% highlight objective-c %}
 [NSURLConnection GET:@"http://placekitten.org/%@/%@", width, height].then(^(UIImage *image){
