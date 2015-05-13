@@ -7,9 +7,9 @@ layout: news
 
 <br>
 
-Apple's Swift announcement was a jaw-dropper and meant big changes for PromiseKit, which, at that time, was still in its infancy. Shortly after the announcement I jumped into Xcode and rocked out a Swift implementation of promises to see how they would feel. The compiler was a fearsome opponent but I emerged victorious with an implementation of type-safe promises and it was clear that they had their charm; however, we now had separate Swift and Objective-C promise implementations and they couldn't be bridged.
+Apple's Swift announcement was a jaw-dropper and meant big changes for PromiseKit, which, at that time, was still in its infancy. Shortly after the announcement, I jumped into Xcode and rocked out a Swift implementation of promises to see how they would feel. The compiler was a fearsome opponent but I emerged victorious with an implementation of type-safe promises. It was clear that they had their charm; however, we now had separate Swift and Objective-C promise implementations which couldn’t be bridged.
 
-A solution to this situation wasn't immediately obvious. Objective-C would never be able to use Swift promises because they were *generic*, and Swift could not (trivially) use our Objective-C promises because of their unusual method signature:
+A solution to this situation wasn’t immediately obvious. Objective-C would never be able to use Swift promises because they were *generic*, and Swift could not (trivially) use our Objective-C promises because of their unusual method signature:
 
 {% highlight objective-c %}
 - (PMKPromise *(^)(id))then;
@@ -101,7 +101,7 @@ NSURLConnection.POST(url, multipartFormData: formData).then {
 }
 {% endhighlight %}
 
-Objective-C can't **see** instances of generic classes, so if we wanted to bridge a `Promise<T>` our only option is to write some Swift:
+Objective-C can’t **see** instances of generic classes, so if we wanted to bridge a `Promise<T>` our only option is to write some Swift:
 
 {% highlight swift %}
 class MyObject {
@@ -121,7 +121,7 @@ class MyObject {
 
 PromiseKit now supports the idea of cancellation.
 
-If the underlying asynchronous task that the promise represents can be cancelled, then the author of that promise can register a specific error domain/code pair with PromiseKit. That error, then, will not trigger a catch handler. Here's an example using an alert view:
+If the underlying asynchronous task that the promise represents can be cancelled, then the author of that promise can register a specific error domain/code pair with PromiseKit. That error, then, will not trigger a catch handler. Here’s an example using an alert view:
 
 {% highlight swift %}
 let alert = UIAlertView(…)
@@ -132,7 +132,7 @@ alert.promise().then {
 }
 {% endhighlight %}
 
-This is typically what you want. If an alert is part of a chain and the user taps a button other than cancel, the chain will continue; however, if the user cancels, you want to abort the chain. But since the user explicitly cancelled the operation, you don't want to run a catch handler that shows an error message.
+This is typically what you want. If an alert is part of a chain and the user taps a button other than cancel, the chain will continue; however, if the user cancels, you want to abort the chain. But since the user explicitly cancelled the operation, you don’t want to run a catch handler that shows an error message.
 
 You can opt-in to catch cancellation. Here’s a more elaborate example where cancellation is caught:
 
@@ -169,7 +169,7 @@ As an added bonus, you can now quickly cancel any chain:
 });
 {% endhighlight %}
 
-This can conveniently and elegantly replace rightward drift inside your chain, and you won't need to remember to ignore some magical thrown-in value in your `catch` handlers.
+This can conveniently and elegantly replace rightward drift inside your chain, and you won’t need to remember to ignore some magical thrown-in value in your `catch` handlers.
 
 ## `recover`
 
@@ -309,7 +309,7 @@ foo.then { obj -> Promise<Type> in
 
 // Because the Swift compiler cannot infer closure types very
 // well yet, one-line closures almost always
-// compile without explicitness. I'm not a fan of this, as it makes
+// compile without explicitness. I’m not a fan of this, as it makes
 // using promises in Swift ugly, but I hope that
 // Apple intend to improve the detection of closure types to
 // make using promises in Swift as delightful as in Objective-C.
@@ -319,7 +319,7 @@ foo.then {
 }
 {% endhighlight %}
 
-If that doesn’t work, it's probably unhappy about the syntax inside the closure. It has become confused and is blaming the syntax of your `then`. Move the code out of the closure and try to compile it at the level of a plain function. When it is fixed, move it back.
+If that doesn’t work, it’s probably unhappy about the syntax inside the closure. It has become confused and is blaming the syntax of your `then`. Move the code out of the closure and try to compile it at the level of a plain function. When it is fixed, move it back.
 
 If you have further issues, feel free to open a ticket **with a screenshot** of
 the error. Hopefully Swift 1.3 will be better with our kind of
@@ -341,7 +341,7 @@ When porting from PromiseKit 1.x to 2.x, your code will probably compile as befo
 * `PMKPromise` will continue to work as a namespace, but is considered deprecated.
 * Features like `when` have been moved to top-level functions (e.g., `[PMKPromise when:]` is now `PMKWhen`). For Swift, they are the same (`when`, `join`, etc.).
 * `PMKJoin` has a different parameter order per the documentation.
-* PromiseKit 2.0 has an iOS 7 minimum deployment target, though for users who want convenience, it is 8.0. This is because CocoaPods and Carthage will only build Swift projects for iOS 8. We intend to explore building a static library that will work on iOS 7, so stay tuned if you're' using PromiseKit 2 on iOS 7 and don’t want to manually compile the framework. The other option is PromiseKit 1.x which (provided you don’t use the Swift version) supports back to iOS 6.
+* PromiseKit 2.0 has an iOS 7 minimum deployment target, though for users who want convenience, it is 8.0. This is because CocoaPods and Carthage will only build Swift projects for iOS 8. We intend to explore building a static library that will work on iOS 7, so stay tuned if you’re using PromiseKit 2 on iOS 7 and don’t want to manually compile the framework. The other option is PromiseKit 1.x which (provided you don’t use the Swift version) supports back to iOS 6.
 * Few exceptions are caught by `AnyPromise`. Because we explicitly encouraged it in the PromiseKit 1.x documentation, we still catch thrown `NSString` objects and thrown `NSError` objects. As before, `Promise<T>` will not catch anything since you can’t throw nor can you catch anything in Swift.
 * PromiseKit 2 is mostly written in Swift. This means you will have to check the relevant project settings to embed a Swift framework.
 
