@@ -5,6 +5,8 @@ layout: news
 
 <p><img style='width:100%' src="/public/img/PMKBanner2.png"></p>
 
+<br>
+
 Apple's Swift announcement was a jaw-dropper and meant big changes for PromiseKit, which, at that time, was still in its infancy. Shortly after the announcement I jumped into Xcode and rocked out a Swift implementation of promises to see how they would feel. The compiler was a fearsome opponent but I emerged victorious with an implementation of type-safe promises and it was clear that they had their charm; however, we now had separate Swift and Objective-C promise implementations and they couldn't be bridged.
 
 A solution to this situation wasn't immediately obvious. Objective-C would never be able to use Swift promises because they were *generic*, and Swift could not (trivially) use our Objective-C promises because of their unusual method signature:
