@@ -5,7 +5,10 @@
 
 #import <PromiseKit/AnyPromise.h>
 
+// ensure `@class PMKPromise` continues to work
+typedef AnyPromise PMKPromise;
 
+// ensure `@interface PMKPromise (foo)` continues to work
 #define PMKPromise AnyPromise
 
 typedef void (^PMKFulfiller)(id);
