@@ -3,7 +3,7 @@ category: news
 layout: news
 ---
 
-<center><img src="http://methylblue.com/junk/PMKBanner.png"></center>
+<center><img src="/img/PMKBanner2.png"></center>
 
 # PromiseKit 2.0
 
