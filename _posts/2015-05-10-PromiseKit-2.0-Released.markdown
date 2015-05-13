@@ -3,6 +3,8 @@ category: news
 layout: news
 ---
 
+<center><img src="http://methylblue.com/junk/PMKBanner.png"></center>
+
 # PromiseKit 2.0
 
 Apple's Swift announcement was a jaw-dropper and meant big changes for PromiseKit, which, at that time, was still in its infancy. Shortly after the announcement I jumped into Xcode and rocked out an implementation of promises in Swift to see how it would feel. After fighting the compiler for a while, I had an implementation of type-safe promises and it was clear that they had their charm; however, we now had separate Swift and Objective-C promise implementations and they couldn't be bridged.
